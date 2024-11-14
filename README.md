@@ -8,6 +8,21 @@ This MacOS app allows users to manually draw Micro QR codes using an 11x11 grid.
 - **Square Cells**: Ensures that each cell maintains a square shape regardless of window size.
 - **Simple and Intuitive UI**: Built with SwiftUI for a native MacOS feel.
 
+
+## Privacy Policy
+
+**Data Privacy and Security**
+
+Micro QR Code M1 Drawer is committed to protecting your privacy. Our app adheres to the following principles to ensure your data remains secure and private:
+
+- **No Data Collection**: The app does not collect or transmit any personal data. All activities within the app are processed locally on your device.
+- **No External Data Downloads**: There are no mechanisms within the app to download data from external servers.
+- **Local Storage**: Any QR codes you create are stored locally on your device and are not transmitted externally.
+- **Open Source Transparency**: The app is fully open source, allowing anyone to inspect, modify, and enhance the source code. This ensures there are no hidden behaviors or data handling practices.
+
+By using Micro QR Code M1 Drawer, you can be confident that your data remains private and under your control. We believe in transparency and the power of open source to provide a secure and trustworthy application.
+
+
 ## Requirements
 
 - macOS 11.0+
