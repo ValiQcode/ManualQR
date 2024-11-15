@@ -32,6 +32,13 @@ struct ContentView: View {
     @State private var showingSidebar = true
     @State private var currentDocument: QRCodeDocument?
 
+    private var windowTitle: String {
+        if let document = currentDocument, let timestamp = document.timestamp {
+            return "ManualQR - \(itemFormatter.string(from: timestamp))"
+        }
+        return "ManualQR"
+    }
+
     var body: some View {
         NavigationView {
             if showingSidebar {
@@ -51,6 +58,7 @@ struct ContentView: View {
             }
             .padding()
             .background(Color.gray.opacity(0))
+            .navigationTitle(windowTitle)
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
