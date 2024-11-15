@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct Cell: View {
     var isBlack: Bool
@@ -21,63 +22,82 @@ struct Cell: View {
 }
 
 struct ContentView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \QRCodeDocument.timestamp, ascending: false)],
+        animation: .default)
+    private var documents: FetchedResults<QRCodeDocument>
+    
     @State private var grid: [[Bool]] = Array(repeating: Array(repeating: false, count: 11), count: 11)
-    @State private var showingSidebar = true
 
     var body: some View {
         NavigationView {
-            if showingSidebar {
-                SidebarView()
-            }
-            
-            VStack {
-                ForEach(0..<11, id: \.self) { row in
-                    HStack {
-                        ForEach(0..<11, id: \.self) { column in
-                            Cell(isBlack: self.grid[row][column]) {
-                                self.toggleCell(row: row, column: column)
-                            }
-                        }
-                    }
-                }
-            }
-            .background(Color.gray.opacity(0))
-            .toolbar {
-                ToolbarItem(placement: .navigation) {
-                    Button(action: {
-                        self.showingSidebar.toggle()
-                    }) {
-                        Image(systemName: "sidebar.leading")
-                    }
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
-                        // Action for creating a new document
-                        self.createNewDocument()
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
+            SidebarView(documents: documents, loadDocument: loadDocument)
+            // Main grid view here...
         }
     }
-    
-    func toggleCell(row: Int, column: Int) {
-        grid[row][column].toggle()
+
+    private func createNewDocument() {
+        let newDocument = QRCodeDocument(context: viewContext)
+        newDocument.timestamp = Date()
+        newDocument.gridData = encodeGrid(grid)
+        
+        do {
+            try viewContext.save()
+        } catch {
+            // Handle errors as appropriate
+        }
     }
-    
-    func createNewDocument() {
-        // Logic to create a new QR code document
-        grid = Array(repeating: Array(repeating: false, count: 11), count: 11)
+
+    private func loadDocument(document: QRCodeDocument) {
+        if let gridData = document.gridData {
+            grid = decodeGrid(gridData)
+        }
+    }
+
+    private func encodeGrid(_ grid: [[Bool]]) -> Data {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: grid, options: [])
+            return jsonData
+        } catch {
+            fatalError("Failed to encode grid data: \(error)")
+        }
+    }
+
+    private func decodeGrid(_ data: Data) -> [[Bool]] {
+        do {
+            if let array = try JSONSerialization.jsonObject(with: data, options: []) as? [[Bool]] {
+                return array
+            } else {
+                fatalError("Failed to decode grid data")
+            }
+        } catch {
+            fatalError("Failed to decode grid data: \(error)")
+        }
     }
 }
 
 struct SidebarView: View {
+    var documents: FetchedResults<QRCodeDocument>
+    var loadDocument: (QRCodeDocument) -> Void
+    
     var body: some View {
-        Text("Document History")
-            .frame(width: 200)
+        List(documents) { document in
+            Button(action: {
+                loadDocument(document)
+            }) {
+                Text("\(document.timestamp ?? Date(), formatter: itemFormatter)")
+            }
+        }
     }
 }
+
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .medium
+    return formatter
+}()
 
 @main
 struct QRCodeApp: App {
