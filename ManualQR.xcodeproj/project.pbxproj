@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		54B8788A2CE5E140007C00BC /* ManualQRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B878892CE5E140007C00BC /* ManualQRApp.swift */; };
 		54B8788C2CE5E140007C00BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B8788B2CE5E140007C00BC /* ContentView.swift */; };
 		54B8788E2CE5E142007C00BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B8788D2CE5E142007C00BC /* Assets.xcassets */; };
 		54B878932CE5E142007C00BC /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B878922CE5E142007C00BC /* Persistence.swift */; };
@@ -16,7 +15,6 @@
 
 /* Begin PBXFileReference section */
 		540C5FB32CE5F900004D9218 /* ManualQR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManualQR.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		54B878892CE5E140007C00BC /* ManualQRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualQRApp.swift; sourceTree = "<group>"; };
 		54B8788B2CE5E140007C00BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		54B8788D2CE5E142007C00BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		54B878922CE5E142007C00BC /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -51,7 +49,6 @@
 				54B8788B2CE5E140007C00BC /* ContentView.swift */,
 				54B878972CE5E142007C00BC /* ManualQR.entitlements */,
 				54B878942CE5E142007C00BC /* ManualQR.xcdatamodeld */,
-				54B878892CE5E140007C00BC /* ManualQRApp.swift */,
 				54B878922CE5E142007C00BC /* Persistence.swift */,
 				540C5FB32CE5F900004D9218 /* ManualQR.app */,
 			);
@@ -135,7 +132,6 @@
 				54B878932CE5E142007C00BC /* Persistence.swift in Sources */,
 				54B8788C2CE5E140007C00BC /* ContentView.swift in Sources */,
 				54B878962CE5E142007C00BC /* ManualQR.xcdatamodeld in Sources */,
-				54B8788A2CE5E140007C00BC /* ManualQRApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
