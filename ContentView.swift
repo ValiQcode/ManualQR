@@ -29,12 +29,47 @@ struct ContentView: View {
     private var documents: FetchedResults<QRCodeDocument>
     
     @State private var grid: [[Bool]] = Array(repeating: Array(repeating: false, count: 11), count: 11)
+    @State private var showingSidebar = true
 
     var body: some View {
         NavigationView {
-            SidebarView(documents: documents, loadDocument: loadDocument)
-            // Main grid view here...
+            if showingSidebar {
+                SidebarView(documents: documents, loadDocument: loadDocument)
+            }
+            
+            VStack {
+                ForEach(0..<11, id: \.self) { row in
+                    HStack {
+                        ForEach(0..<11, id: \.self) { column in
+                            Cell(isBlack: self.grid[row][column]) {
+                                self.toggleCell(row: row, column: column)
+                            }
+                        }
+                    }
+                }
+            }
+            .background(Color.gray.opacity(0))
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    Button(action: {
+                        self.showingSidebar.toggle()
+                    }) {
+                        Image(systemName: "sidebar.leading")
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        createNewDocument()
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
+    }
+
+    private func toggleCell(row: Int, column: Int) {
+        grid[row][column].toggle()
     }
 
     private func createNewDocument() {
@@ -101,9 +136,12 @@ private let itemFormatter: DateFormatter = {
 
 @main
 struct QRCodeApp: App {
+    let persistenceController = PersistenceController.shared
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
