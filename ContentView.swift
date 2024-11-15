@@ -49,6 +49,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .padding()
             .background(Color.gray.opacity(0))
             .toolbar {
                 ToolbarItem(placement: .navigation) {
@@ -64,6 +65,14 @@ struct ContentView: View {
                     }) {
                         Image(systemName: "plus")
                     }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        deleteCurrentDocument()
+                    }) {
+                        Image(systemName: "trash")
+                    }
+                    .disabled(currentDocument == nil)
                 }
             }
         }
@@ -124,6 +133,20 @@ struct ContentView: View {
             }
         } catch {
             fatalError("Failed to decode grid data: \(error)")
+        }
+    }
+
+    private func deleteCurrentDocument() {
+        if let document = currentDocument {
+            viewContext.delete(document)
+            
+            do {
+                try viewContext.save()
+                currentDocument = nil
+                grid = Array(repeating: Array(repeating: false, count: 11), count: 11)
+            } catch {
+                print("Error deleting document: \(error)")
+            }
         }
     }
 }
