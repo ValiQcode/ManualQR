@@ -30,6 +30,7 @@ struct ContentView: View {
     
     @State private var grid: [[Bool]] = Array(repeating: Array(repeating: false, count: 11), count: 11)
     @State private var showingSidebar = true
+    @State private var currentDocument: QRCodeDocument?
 
     var body: some View {
         NavigationView {
@@ -70,23 +71,38 @@ struct ContentView: View {
 
     private func toggleCell(row: Int, column: Int) {
         grid[row][column].toggle()
+        
+        // Update current document if it exists
+        if let document = currentDocument {
+            document.gridData = encodeGrid(grid)
+            
+            do {
+                try viewContext.save()
+            } catch {
+                print("Error saving document: \(error)")
+            }
+        }
     }
 
     private func createNewDocument() {
+        // Create new document with empty grid
         let newDocument = QRCodeDocument(context: viewContext)
         newDocument.timestamp = Date()
-        newDocument.gridData = encodeGrid(grid)
+        newDocument.gridData = encodeGrid(Array(repeating: Array(repeating: false, count: 11), count: 11))
         
         do {
             try viewContext.save()
+            currentDocument = newDocument
+            grid = Array(repeating: Array(repeating: false, count: 11), count: 11)
         } catch {
-            // Handle errors as appropriate
+            print("Error saving document: \(error)")
         }
     }
 
     private func loadDocument(document: QRCodeDocument) {
         if let gridData = document.gridData {
             grid = decodeGrid(gridData)
+            currentDocument = document
         }
     }
 
