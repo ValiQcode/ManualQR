@@ -14,20 +14,20 @@ struct Cell: View {
     var body: some View {
         Rectangle()
             .fill(isBlack ? Color.black : Color.white)
-            .aspectRatio(1, contentMode: .fit) // Ensures the cell remains square
-            .border(Color.gray, width: 1)
+            .aspectRatio(1, contentMode: .fit)
+            .border(Color.gray.opacity(1), width: 0)
             .onTapGesture(perform: action)
     }
 }
 
 struct ContentView: View {
     @State private var grid: [[Bool]] = Array(repeating: Array(repeating: false, count: 11), count: 11)
-    @State private var showingSidebar = true // State to manage sidebar visibility
+    @State private var showingSidebar = true
 
     var body: some View {
         NavigationView {
             if showingSidebar {
-                SidebarView() // This will be your history panel
+                SidebarView()
             }
             
             VStack {
@@ -41,7 +41,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .background(Color.gray) // Set the background color to gray
+            .background(Color.gray.opacity(0))
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
